@@ -1,0 +1,21 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title site.Title }}{{ end }}</title>
+{{ with .Description }}<meta name="description" content="{{ . }}">{{ end }}
+{{ hugo.Generator }}
+{{ partialCached "head/css.html" . }}
+{{- /* 主题预置：首帧前应用存储的主题（无则跟随系统），并同步 chroma 高亮表。
+       无 JS 时退化：data-theme 不存在，CSS 媒体查询接管。 */}}
+<script>
+(function () {
+  var stored = null;
+  try { stored = localStorage.getItem('theme'); } catch (e) {}
+  var dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  document.querySelectorAll('link[href*="chroma-"]').forEach(function (l) {
+    var isDark = l.href.indexOf('chroma-dark') !== -1;
+    l.media = (dark === isDark) ? 'all' : 'not all';
+  });
+})();
+</script>
+{{- if .Params.math }}{{ partial "head/math.html" . }}{{ end }}

@@ -1,0 +1,2 @@
+{{- /* 文章图片统一走这里：懒加载 + 异步解码，alt 必填（来自 Markdown 的 ![alt](src)） */}}
+<img src="{{ .Destination | safeURL }}" alt="{{ .PlainText }}" loading="lazy" decoding="async">

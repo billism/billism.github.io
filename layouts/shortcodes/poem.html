@@ -1,0 +1,11 @@
+{{- /* 居中诗行 shortcode：每行一个 span，整块居中。
+     可选参数 title / author；Inner 按行拆分，空行忽略。
+     用法示例见 README.md 的「排版约定」一节。 */ -}}
+<div class="poem">
+  {{- with .Get "title" }}<span class="poem-title">{{ . }}</span>{{ end -}}
+  {{- with .Get "author" }}<span class="poem-byline">{{ . }}</span>{{ end -}}
+  {{- range split (trim .Inner "\r\n\t ") "\n" -}}
+    {{- $line := trim . " \t" -}}
+    {{- if gt (len $line) 0 }}<span class="poem-line">{{ $line }}</span>{{ end -}}
+  {{- end -}}
+</div>

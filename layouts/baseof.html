@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  <header class="site-header">
+    {{ partial "header.html" . }}
+  </header>
+  <main{{ with .Layout }} class="layout-{{ . }}"{{ end }}>
+    {{ block "main" . }}{{ end }}
+  </main>
+  <footer class="site-footer">
+    {{ partial "footer.html" . }}
+  </footer>
+</body>
+</html>

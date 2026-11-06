@@ -1,0 +1,25 @@
+{{ define "main" }}
+  {{- $isPost := eq .Section "posts" }}
+  <article class="{{ if $isPost }}post{{ else }}flat{{ end }}">
+    <h1 class="page-title">{{ .Title }}</h1>
+
+    {{- if $isPost }}
+      <p class="meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time></p>
+    {{- end }}
+
+    {{- if .Params.toc }}
+      <details class="toc">
+        <summary>目录</summary>
+        {{ .TableOfContents }}
+      </details>
+    {{- end }}
+
+    <div class="prose">
+      {{ .Content }}
+    </div>
+
+    {{- if $isPost }}
+      <p class="back"><a href="{{ "posts/" | relURL }}">← Posts</a></p>
+    {{- end }}
+  </article>
+{{ end }}

@@ -1,0 +1,16 @@
+{{- with resources.Get "css/main.css" }}
+  {{- with . | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+  {{- end }}
+{{- end }}
+{{- /* 语法高亮：亮/暗两套 chroma 配色，跟随系统切换 */}}
+{{- with resources.Get "css/chroma-light.css" }}
+  {{- with . | minify | fingerprint }}
+    <link rel="stylesheet" media="(prefers-color-scheme: light)" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+  {{- end }}
+{{- end }}
+{{- with resources.Get "css/chroma-dark.css" }}
+  {{- with . | minify | fingerprint }}
+    <link rel="stylesheet" media="(prefers-color-scheme: dark)" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+  {{- end }}
+{{- end }}

@@ -1,0 +1,24 @@
+{{ define "main" }}
+  <section class="hero">
+    <h1 class="hero-title">{{ site.Title }}</h1>
+    <p class="hero-tagline">Ye's weblog</p>
+  </section>
+
+  {{- with site.Params.home_intro }}
+    <div class="home-intro">{{ . | markdownify }}</div>
+  {{- end }}
+
+  {{- $posts := where site.RegularPages "Section" "posts" }}
+  {{- with $posts.ByDate.Reverse }}
+    <ul class="post-list">
+      {{- range first 5 . }}
+        <li>
+          <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+          <time class="meta" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+        </li>
+      {{- end }}
+    </ul>
+  {{- end }}
+
+  <p class="more"><a href="{{ "posts/" | relURL }}">All posts →</a></p>
+{{ end }}

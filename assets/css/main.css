@@ -1,0 +1,624 @@
+/* Achso! — 站点根目录自写覆盖样式
+   字体两档：正文 = 系统无衬线（英文 Segoe/SF，中文雅黑/苹方）；
+   系统层（导航/页脚/日期）= 等宽。站名一点铁锈红 */
+
+/* ---------- 变量：亮色（纸感学术）---------- */
+:root {
+  --bg: #faf8f2;
+  --text: #262420;
+  --text-low: #6f6a5e;
+  --border: #e6e1d4;
+  --accent: #b45309;        /* 暗而稳的琥珀 */
+  --accent-strong: #8a3d05;
+  --brand: #a63b28;         /* 复古铁锈红：站名专用 */
+  --brand-strong: #87291c;
+  --heading: #a63b28;       /* 标题用铁锈红（亮色下与站名同色） */
+  --code-bg: #f1ede2;
+  --mono: "JetBrains Mono", "Fira Code", Consolas, Menlo, "Microsoft YaHei", "PingFang SC", monospace;
+  /* 全无衬线：system-ui 管各平台英文（Win=Segoe, macOS=SF），中文字形落到雅黑/苹方。
+     雅黑为屏幕渲染做过 hinting，低分屏不发糊 */
+  --body-font: system-ui, "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
+  /* 全站统一栏宽：= 正文 42em × 1.0625rem 字号 = 714px。
+     用 rem 变量而不是 em，保证导航/页脚（字号更小）与正文栏精确对齐 */
+  --col-width: 44.625rem;
+}
+
+/* ---------- 变量：暗色（终端风）----------
+   同一份暗色变量写两处：
+   1) 媒体查询（:not 排除手动亮色）—— 无 JS 时跟随系统；
+   2) [data-theme="dark"] —— 手动切换按钮写入，覆盖系统。 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16130f;
+    --text: #d9d4c8;
+    --text-low: #8d8779;
+    --border: #2d2820;
+    --accent: #e5b34d;      /* 柔和旧金色：链接语义不变，但不像荧光琥珀那样跳出暗色画面 */
+    --accent-strong: #f4c766;
+    --brand: #d65038;       /* 暗色下的铁锈红：压住绿蓝分量，不发桃粉 */
+    --brand-strong: #ea6a4e;
+    /* 暗色下的大标题比站名更沉：降饱和、压亮度，还原亮色版的"墨感"，
+       避免大字饱和红在近黑底上的霓虹/警报感 */
+    --heading: #bf4a38;
+    --code-bg: #211d16;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #16130f;
+  --text: #d9d4c8;
+  --text-low: #8d8779;
+  --border: #2d2820;
+  --accent: #e5b34d;
+  --accent-strong: #f4c766;
+  --brand: #d65038;
+  --brand-strong: #ea6a4e;
+  --heading: #bf4a38;
+  --code-bg: #211d16;
+}
+
+/* ---------- 基础 ---------- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+/* 选中文字的底色：淡琥珀（借鉴 orgcss 的 ::selection 思路，换成琥珀系） */
+::selection {
+  background: #f3e2bd;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) ::selection {
+    background: #4a3410;
+  }
+}
+
+:root[data-theme="dark"] ::selection {
+  background: #4a3410;
+}
+
+/* 脚注上标不撑大所在行行距 */
+sup {
+  line-height: 0;
+}
+
+body {
+  margin: 0;
+  /* 粘性页脚：内容不足一屏时 footer 也贴底 */
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body-font);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+main {
+  flex: 1 0 auto;
+  /* width:100% + max-width：flex 列布局下 auto 边距会把 main 收缩成内容宽，需显式给定宽度 */
+  width: 100%;
+  max-width: var(--col-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ---------- 链接：颜色 + 极细下划线常驻，hover 加深 ---------- */
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  color: var(--accent-strong);
+}
+
+/* 安静链接（导航/页脚/← Posts/All posts）：同规则，颜色更淡 */
+.site-header a,
+.back a,
+.more a {
+  color: var(--text-low);
+}
+
+.site-header a:hover,
+.back a:hover,
+.more a:hover {
+  color: var(--text);
+}
+
+/* 导航（品牌、菜单项、· 分隔符）一律不带下划线 */
+.site-header a {
+  text-decoration: none;
+}
+
+/* ---------- 等宽系统层 ---------- */
+code,
+pre,
+kbd,
+samp,
+.meta,
+nav,
+footer,
+.year,
+.toc summary,
+.more,
+.back {
+  font-family: var(--mono);
+}
+
+/* ---------- 顶部导航 ---------- */
+.site-header {
+  font-size: 0.875rem;
+}
+
+.site-header .bar {
+  max-width: var(--col-width);
+  margin: 0 auto;
+  padding: 1.4rem 1rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+}
+
+.site-header .brand {
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.site-header .brand:hover {
+  color: var(--brand-strong);
+}
+
+/* 菜单项之间用 · 分隔 */
+.site-header .menu a:not(:first-child)::before {
+  content: "·";
+  margin: 0 0.55em;
+  color: var(--text-low);
+  text-decoration: none;
+}
+
+/* 当前页：轻微加粗 + 变深（相对其余低对比度项） */
+.site-header .menu a.active {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ---------- 亮暗切换按钮 ---------- */
+.theme-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-low);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+}
+
+.theme-toggle:hover {
+  color: var(--text);
+}
+
+.theme-toggle svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* 图标显示"将要切换到"的主题：亮色下显示月亮，暗色下显示太阳 */
+.theme-toggle .icon-sun {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
+}
+
+/* ---------- 首页简介（hugo.toml 的 params.home_intro，留空不显示）---------- */
+.home-intro {
+  margin: 0 0 2.2rem;
+  max-width: 36em;
+  color: var(--text);
+}
+
+.home-intro p {
+  margin: 0 0 0.8rem;
+}
+
+.home-intro p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- 首页 ---------- */
+.hero {
+  margin: 2.4rem 0 1.7rem;
+}
+
+.hero-title {
+  margin: 0;
+  font-size: 1.9rem;
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--heading);   /* 首页站名与各页 h1 同色：标题层级 = 铁锈红 */
+}
+
+.hero-tagline {
+  margin: 0.35rem 0 0;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  color: var(--text-low);
+}
+
+/* ---------- 文章列表（首页 / Posts 索引共用）---------- */
+.post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.post-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.24rem 0;
+}
+
+.post-list .meta {
+  font-size: 0.875rem;
+  color: var(--text-low);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* 年份标题：极轻的等宽小字 */
+.year {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--text-low);
+  margin: 2.3rem 0 0.5rem;
+}
+
+.more {
+  margin: 1.7rem 0 2.5rem;
+  font-size: 0.875rem;
+  color: var(--text-low);
+}
+
+/* ---------- 单篇 / 单页 ---------- */
+.page-title {
+  margin: 2.3rem 0 0.4rem;
+  font-size: 1.55rem;
+  line-height: 1.4;
+  font-weight: 700;
+  color: var(--heading);
+}
+
+p.meta {
+  margin: 0 0 1.8rem;
+  font-size: 0.875rem;
+  color: var(--text-low);
+}
+
+.back {
+  margin: 3.5rem 0 2.5rem;
+  font-size: 0.875rem;
+  color: var(--text-low);
+}
+
+/* ---------- TOC：可折叠，默认收起 ---------- */
+details.toc {
+  margin: 0.9rem 0 1.9rem;
+  font-size: 0.9375rem;
+}
+
+details.toc summary {
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--text-low);
+  width: fit-content;
+}
+
+details.toc[open] summary {
+  margin-bottom: 0.4rem;
+}
+
+details.toc #TableOfContents ul {
+  list-style: none;
+  padding-left: 1.1rem;
+  margin: 0;
+}
+
+details.toc #TableOfContents li {
+  margin: 0.1rem 0;
+  line-height: 1.6;
+}
+
+/* ---------- 正文 ---------- */
+/* 章节标题染铁锈红（借鉴 orgcss 的赭色标题），灰发丝底线保持安静 */
+.prose h2,
+.prose h3,
+.prose h4 {
+  margin: 2.2rem 0 0.6rem;
+  line-height: 1.4;
+  font-weight: 700;
+  color: var(--heading);
+}
+
+.prose h2 {
+  font-size: 1.375em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--border);
+}
+
+.prose h3 {
+  font-size: 1.125em;
+}
+
+.prose h4 {
+  font-size: 1em;
+}
+
+.prose p,
+.prose ul,
+.prose ol {
+  margin: 0 0 1.1rem;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.6rem;
+}
+
+.prose li {
+  margin: 0.2rem 0;
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ---------- 表格：学术三线表（借鉴 orgcss / booktabs）---------- */
+.prose table {
+  margin: 1.4rem auto;
+  border-collapse: collapse;
+  border-top: 2px solid var(--text-low);
+  border-bottom: 2px solid var(--text-low);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.prose thead {
+  border-bottom: 2px solid var(--text-low);
+}
+
+.prose tbody tr {
+  border-top: 1px solid var(--border);
+}
+
+.prose th,
+.prose td {
+  padding: 0.35em 0.8em;
+  vertical-align: middle;
+}
+
+.prose td + td,
+.prose th + th {
+  border-left: 1px solid var(--border);
+}
+
+.prose caption {
+  caption-side: top;
+  margin-bottom: 0.4em;
+  font-size: 0.875rem;
+  color: var(--text-low);
+}
+
+/* ---------- 图片与图注 ---------- */
+.prose figure {
+  margin: 1.4rem auto;
+  text-align: center;
+}
+
+.prose figcaption {
+  font-size: 0.875rem;
+  color: var(--text-low);
+  margin-top: 0.4rem;
+}
+
+/* ---------- 古诗 / 居中诗行（poem shortcode）---------- */
+.poem {
+  margin: 1.6rem auto 1.8rem;
+  text-align: center;
+}
+
+.poem .poem-line {
+  display: block;
+  line-height: 2;
+  letter-spacing: 0.05em;
+}
+
+.poem .poem-title {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.1rem;
+}
+
+.poem .poem-byline {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--text-low);
+  margin-bottom: 0.6rem;
+}
+
+.prose blockquote {
+  margin: 1.4rem 0;
+  padding: 0.2rem 1.2rem;
+  border-left: 3px solid var(--accent);
+  color: var(--text-low);
+}
+
+.prose blockquote p {
+  margin: 0.4rem 0;
+}
+
+.prose blockquote p:first-child {
+  margin-top: 0;
+}
+
+.prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.4rem 0;
+}
+
+/* 行内代码 / 键帽：等宽 + 微底色 + 发丝边框（借鉴 orgcss 的 bordered chip） */
+code,
+kbd {
+  font-size: 0.875em;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+pre {
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  border-radius: 6px;
+  background: var(--code-bg);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  /* 行内代码的芯片边框不能带进代码块：<code> 是行内元素，
+     跨行后左边框画在首行开头、右边框画在末行结尾（表现为首尾两条竖线） */
+  border: 0;
+  border-radius: 0;
+}
+
+/* chroma 高亮的 pre 底色跟随主题变量（特异性高于 .chroma 的默认背景） */
+.highlight pre {
+  background-color: var(--code-bg);
+}
+
+/* ---------- 脚注 ---------- */
+.footnotes {
+  margin-top: 3rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.875em;
+  color: var(--text-low);
+}
+
+.footnotes hr {
+  display: none;   /* 分隔线由容器上边框承担 */
+}
+
+.footnotes ol {
+  padding-left: 1.4rem;
+  margin: 0.4rem 0 0;
+}
+
+.footnotes li {
+  margin: 0.25rem 0;
+}
+
+/* 脚注数字标记用等宽 */
+.footnotes a,
+sup a {
+  font-family: var(--mono);
+  font-size: 0.78em;
+}
+
+/* ---------- Reading 页 ---------- */
+.layout-reading .prose h2 {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--text-low);
+  margin: 2.3rem 0 0.6rem;
+  border: none;      /* 年份小标题不带 h2 的发丝底线 */
+  padding: 0;
+}
+
+.layout-reading .prose p {
+  margin: 0 0 0.9rem;
+}
+
+/* ---------- About 页 ---------- */
+.github {
+  white-space: nowrap;
+}
+
+.github svg {
+  fill: currentColor;
+  vertical-align: -0.18em;
+  margin-right: 0.4em;
+}
+
+/* ---------- MathJax ---------- */
+/* 显示公式窄屏不横向溢出；公式颜色随主题变量自动继承 */
+mjx-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+}
+
+/* ---------- 全站页脚 ---------- */
+.site-footer {
+  font-size: 0.875rem;
+  color: var(--text-low);
+}
+
+.site-footer .colophon {
+  max-width: var(--col-width);
+  margin: 0 auto;
+  padding: 3rem 1rem 2.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+/* 两侧渐隐细线：---- 文字 ---- */
+.site-footer .colophon::before,
+.site-footer .colophon::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+}
+
+.site-footer .colophon::before {
+  background: linear-gradient(to right, transparent, var(--border) 35%);
+}
+
+.site-footer .colophon::after {
+  background: linear-gradient(to left, transparent, var(--border) 35%);
+}
+
+/* ---------- 404 ---------- */
+.content__header h1 {
+  margin: 2.2rem 0 1.2rem;
+  font-size: 2rem;
+}

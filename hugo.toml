@@ -1,0 +1,26 @@
+baseURL = 'https://example.org/'
+locale = 'zh-cn'
+title = 'Achso!'
+
+# 暂不启用 tags/categories
+disableKinds = ['taxonomy', 'term']
+
+[params]
+  # 首页副标题与文章列表之间的一段介绍；留空 '' 或删除本行则不显示。
+  # 支持 Markdown：空行分段，可用 **加粗**、[链接](https://…) 等。
+  home_intro = 'The meaning of the world is the separation and the union of fact and wish.'
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      # 允许在 Markdown 里写内联 HTML（About 页的内联 SVG 图标等）
+      unsafe = true
+    # 数学公式：让 Goldmark 原样保留 LaTeX 定界符，交给客户端 MathJax 渲染
+    # （Hugo 0.169 里扩展开关键名是 enable，旧文档写的 enabled 会被静默忽略）
+    [markup.goldmark.extensions.passthrough]
+      enable = true
+      [markup.goldmark.extensions.passthrough.delimiters]
+        inline = [['\(', '\)']]
+        block = [['\[', '\]'], ['$$', '$$']]
