@@ -4,8 +4,8 @@
     <p class="hero-tagline">Ye's weblog</p>
   </section>
 
-  {{- with site.Params.home_intro }}
-    <div class="home-intro">{{ . | markdownify }}</div>
+  {{- with .Content }}
+    <div class="home-intro">{{ . }}</div>
   {{- end }}
 
   {{- $posts := where site.RegularPages "Section" "posts" }}

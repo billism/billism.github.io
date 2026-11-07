@@ -21,15 +21,25 @@ hugo new content posts/my-post/index.md
 |---|---|
 | `draft` | `true` 时不会在站点上公开 |
 | `toc` | `true` 显示可折叠的目录 |
-| `math` | `true` 加载 MathJax<br>行内公式 `\(...\)`，块级公式 `$$…$$` 或 `\[…\]` |
+| `math` | `true` 加载 MathJax<br>行内公式 `\(...)`，块级公式 `$$…$$` 或 `\[…\]` |
 | `description` | 文章摘要， 会写入`<meta name="description">` |
+
+## 记读书目录
+
+```bash
+hugo new content reading/<书名-slug>.md
+```
+
+- 每本书一个小文件，`date` 填当天即可（页面只显示年-月），`pages` 选填（页数）
+- archetype 自动带上 `[build] render = 'never'`：书目只出现在 Reading 列表里，不生成独立页面
+- Reading 页按年分组，复用与 Posts 相同的列表样式
 
 ## 排版约定
 
 - 导航、日期、页脚、代码等是等宽字体
 - 正文是系统无衬线
 - 亮/暗主题跟随系统，右上角按钮可手动切换并记忆（localStorage）
-- 首页简介在 `hugo.toml` 的 `params.home_intro`，留空不显示，支持 Markdown
+- 首页简介写在 `content/_index.md` 正文里，留空文件则不显示，支持 Markdown
 - 诗歌居中用 shortcode：
 
 ```

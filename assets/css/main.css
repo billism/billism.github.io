@@ -227,7 +227,7 @@ footer,
   display: none;
 }
 
-/* ---------- 首页简介（hugo.toml 的 params.home_intro，留空不显示）---------- */
+/* ---------- 首页简介（content/_index.md 正文，留空不显示）---------- */
 .home-intro {
   margin: 0 0 2.2rem;
   max-width: 36em;
@@ -551,20 +551,6 @@ pre code {
 sup a {
   font-family: var(--mono);
   font-size: 0.78em;
-}
-
-/* ---------- Reading 页 ---------- */
-.layout-reading .prose h2 {
-  font-size: 0.875rem;
-  font-weight: 400;
-  color: var(--text-low);
-  margin: 2.3rem 0 0.6rem;
-  border: none;      /* 年份小标题不带 h2 的发丝底线 */
-  padding: 0;
-}
-
-.layout-reading .prose p {
-  margin: 0 0 0.9rem;
 }
 
 /* ---------- About 页 ---------- */

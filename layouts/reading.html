@@ -1,0 +1,19 @@
+{{ define "main" }}
+  <article>
+    <h1 class="page-title">{{ .Title }}</h1>
+    {{ .Content }}
+
+    {{- /* 书目带 build.render='never'，只进列表不生成页面，故条目是 span 不是链接 */}}
+    {{- range .Pages.GroupByDate "2006" "desc" }}
+      <h2 class="year">{{ .Key }}</h2>
+      <ul class="post-list">
+        {{- range .Pages.ByDate.Reverse }}
+          <li>
+            <span>{{ with .Params.author }}{{ . }}：{{ end }}{{ .Title }}</span>
+            <time class="meta" datetime="{{ .Date.Format "2006-01" }}">{{ .Date.Format "2006-01" }}{{ with .Params.pages }} · {{ . }} Pgs{{ end }}</time>
+          </li>
+        {{- end }}
+      </ul>
+    {{- end }}
+  </article>
+{{ end }}

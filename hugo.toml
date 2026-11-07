@@ -5,11 +5,6 @@ title = 'Achso!'
 # 暂不启用 tags/categories
 disableKinds = ['taxonomy', 'term']
 
-[params]
-  # 首页副标题与文章列表之间的一段介绍；留空 '' 或删除本行则不显示。
-  # 支持 Markdown：空行分段，可用 **加粗**、[链接](https://…) 等。
-  home_intro = 'The meaning of the world is the separation and the union of fact and wish.'
-
 [markup]
   [markup.highlight]
     noClasses = false
